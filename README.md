@@ -2,6 +2,7 @@
 
 ## Requirements
 
+- git [Installation](http://git-scm.com/downloads)
 - Docker Toolbox. [Installation](https://www.docker.com/toolbox)
 - MiniConda [Installation](http://conda.pydata.org/miniconda.html)
 
