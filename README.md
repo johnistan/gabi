@@ -17,6 +17,7 @@ Installation instructions.
     docker pull wurstmeister/zookeeper:latest
     docker pull redis
 
+
 - Start a new conda enviornment
 
 
