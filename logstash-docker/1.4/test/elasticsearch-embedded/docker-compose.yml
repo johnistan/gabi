@@ -1,0 +1,9 @@
+---
+logstash:
+  build: .
+  ports:
+   - '9200:9200'
+   - '9300:9300'
+   - '9292:9292'
+  environment:
+    LOGSTASH_CONFIG_URL: https://gist.githubusercontent.com/pblittle/97a42fe707bd0b4b1c10/raw/docker-logstash.conf

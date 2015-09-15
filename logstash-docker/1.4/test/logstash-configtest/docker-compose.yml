@@ -1,0 +1,4 @@
+---
+logstash:
+  build: .
+  command: configtest

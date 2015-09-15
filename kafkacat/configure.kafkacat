@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+
+mkl_require good_cflags
+mkl_require gitversion as KAFKACAT_VERSION
+
+
+function checks {
+
+    # Check that librdkafka is available, and allow to link it statically.
+    mkl_meta_set "librdkafka" "desc" "librdkafka is available at http://github.com/edenhill/librdkafka. To quickly download all dependencies and build kafkacat try ./bootstrap.sh"
+    mkl_meta_set "librdkafka" "deb" "librdkafka-dev"
+    mkl_lib_check --static=-lrdkafka "librdkafka" "" fail CC "-lrdkafka -lpthread -lz" \
+       "#include <librdkafka/rdkafka.h>"
+
+    # Make sure rdkafka is new enough.
+    mkl_meta_set "librdkafkaver" "name" "librdkafka metadata API"
+    mkl_meta_set "librdkafkaver" "desc" "librdkafka 0.8.4 or later is required for the Metadata API"
+    mkl_compile_check "librdkafkaver" "" fail CC "" \
+"#include <librdkafka/rdkafka.h>
+struct rd_kafka_metadata foo;"
+
+    # -lrt required on linux
+    mkl_lib_check "librt" "" cont CC "-lrt"
+
+
+    mkl_meta_set "yajl" "deb" "libyajl-dev"
+    # Check for JSON library (yajl)
+    if [[ $WITH_JSON == y ]] && \
+        mkl_lib_check --static=-lyajl "yajl" HAVE_YAJL disable CC "-lyajl" \
+        "#include  <yajl/yajl_version.h>
+#if YAJL_MAJOR >= 2
+#else
+#error \"Requires libyajl2\"
+#endif
+"
+    then
+        mkl_allvar_set "json" ENABLE_JSON y
+    fi
+}
+
+
+
+mkl_toggle_option "kafkacat" WITH_JSON --enable-json "JSON support (requires libyajl2)" y

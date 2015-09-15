@@ -1,0 +1,11 @@
+\#*
+*~
+*.o
+*.d
+kafkacat
+config.cache
+config.log*
+config.h
+Makefile.config
+tmp-bootstrap
+*.offset
