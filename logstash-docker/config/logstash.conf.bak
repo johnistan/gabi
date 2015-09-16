@@ -1,0 +1,24 @@
+input {
+   lumberjack {
+     port => 7000
+     type => "logs"
+     ssl_certificate => "/opt/ssl/logstash-forwarder.crt"
+     ssl_key => "/opt/ssl/logstash-forwarder.key"
+   }
+
+  file {
+    type => "syslog"
+    path => [ "/var/log/*.log", "/var/log/messages", "/var/log/syslog" ]
+    start_position => "beginning"
+  }
+}
+
+output {
+  stdout {
+    codec => rubydebug
+  }
+
+  elasticsearch {
+    embedded => true
+  }
+}

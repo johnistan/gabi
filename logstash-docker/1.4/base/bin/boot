@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Fail fast, including pipelines
+set -e -o pipefail
+
+# Disable LOGSTASH_TRACE if it hasn't been defined
+: "${LOGSTASH_TRACE:=false}"
+
+# Set LOGSTASH_TRACE to enable debugging
+[[ $LOGSTASH_TRACE ]] && set -x
+
+SCRIPT_ROOT=$(readlink -f "$(dirname "$0")"/..)
+export SCRIPT_ROOT
+
+. "${SCRIPT_ROOT}/config.sh" || exit 1
+. "${SCRIPT_ROOT}/elasticsearch.sh" || exit 1
+. "${SCRIPT_ROOT}/logstash.sh" || exit 1
+. "${SCRIPT_ROOT}/kibana.sh" || exit 1
+. "${SCRIPT_ROOT}/logstash-forwarder.sh" || exit 1
+
+function main() {
+
+    logstash_create_config_dir
+
+    logstash_download_config
+
+    kibana_sanitize_config
+
+    elasticsearch_disable_dynamic
+
+    logstash_create_log_dir
+
+    forwarder_create_ssl_dir
+
+    forwarder_download_key
+
+    forwarder_download_cert
+
+    # Fire up logstash!
+    #
+    logstash_start_agent "$@"
+}
+
+main "$@"
