@@ -18,12 +18,21 @@ Installation instructions.
     docker pull redis
     ```
 
-- Start a new conda enviornment
-
-    ```
-    conda create -n gabi python numpy ipython ipython-notebook
-    ```
-
 We will also provide these images on USB keys if you are unable to download these tools. If you plan on using the USB keys, please arrive early to the workshop to get setup.
 
 Also please note, Windows support for docker is very recent. While its possible for these tools to work on new versions of windows, you will be responsible for ensuring they work on windows. We can only provide installation support for Mac OSX and Linux machines.
+
+
+# to start
+
+```
+#make sure you are in the root of this directory
+docker run -it -p 8888:8888 -v /Users/jdennison/repos/gabi_workshop:/notebooks ipython_notebook /bin/bash
+#then
+/run_notebook.sh
+```
+
+in seperate terminal.
+```
+docker-compose up
+```
